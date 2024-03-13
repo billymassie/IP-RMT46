@@ -1,7 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+const { hashPassword } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -10,16 +9,54 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.hasMany(models.UserMovie, { foreignKey: 'UserId' });
     }
   }
-  User.init({
-    userName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      userName: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          notNull: {
+            msg: 'Email is required',
+          },
+          notEmpty: {
+            msg: 'Email is required',
+          },
+          isEmail: {
+            msg: 'Invalid email',
+          },
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Password is required',
+          },
+          notEmpty: {
+            msg: 'Password is required',
+          },
+          len: {
+            args: [5, 30],
+            msg: 'Password minimum 5 character',
+          },
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: 'User',
+      hooks: {
+        beforeCreate(instance) {
+          instance.password = hashPassword(instance.password);
+        },
+      },
+    }
+  );
   return User;
 };
