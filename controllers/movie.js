@@ -25,7 +25,6 @@ class Controller {
         })
       );
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -57,7 +56,6 @@ class Controller {
         : 'you already has the movie';
       res.status(200).json({ message: response });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

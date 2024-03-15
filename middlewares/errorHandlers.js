@@ -1,4 +1,5 @@
 module.exports = (error, req, res, next) => {
+  console.log(error);
   let status = error.status || 500;
   let message = error.message || 'Internal server error';
 
@@ -18,6 +19,14 @@ module.exports = (error, req, res, next) => {
     case 'AuthenticationError':
       status = 401;
       message = 'Unauthenticated';
+      break;
+    case 'NotFound':
+      status = 404;
+      message = 'Data Not Found';
+      break;
+    case 'BadRequest':
+      status = 400;
+      message = 'Invalid Request';
       break;
     default:
       break;
