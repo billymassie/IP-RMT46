@@ -11,6 +11,14 @@ module.exports = (error, req, res, next) => {
       status = 400;
       message = error.errors[0].message;
       break;
+    case 'loginError':
+      status = 400;
+      message = 'Invalid email or password';
+      break;
+    case 'AuthenticationError':
+      status = 401;
+      message = 'Unauthenticated';
+      break;
     default:
       break;
   }
