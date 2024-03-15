@@ -1,3 +1,4 @@
+const { Movie, UserMovie } = require('../models');
 const { default: axios } = require('axios');
 const apiKey = process.env.TMDB_API_KEY;
 
@@ -23,6 +24,38 @@ class Controller {
           };
         })
       );
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+  static async addMovie(req, res, next) {
+    try {
+      const { title, posterUrl, backdropUrl, overview, tmdbId } = req.body;
+      const [movie] = await Movie.findOrCreate({
+        where: { tmdbId: tmdbId },
+        defaults: {
+          title: title,
+          posterUrl: posterUrl,
+          backdropUrl: backdropUrl,
+          overview: overview,
+          tmdbId: tmdbId,
+        },
+      });
+      const [data, created] = await UserMovie.findOrCreate({
+        where: {
+          UserId: req.user.id,
+          MovieId: movie.id,
+        },
+        default: {
+          UserId: req.user.id,
+          MovieId: movie.id,
+        },
+      });
+      const response = created
+        ? 'movie has been added'
+        : 'you already has the movie';
+      res.status(200).json({ message: response });
     } catch (error) {
       console.log(error);
       next(error);
