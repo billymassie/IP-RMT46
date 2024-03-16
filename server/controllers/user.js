@@ -1,6 +1,8 @@
 const { comparePassword } = require('../helpers/bcrypt');
 const { signToken } = require('../helpers/jsonwebtoken');
 const { User, Movie, UserMovie } = require('../models');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client();
 
 class Controller {
   static async register(req, res, next) {
@@ -27,6 +29,30 @@ class Controller {
         id: user.id,
       });
       res.status(200).json({ access_token: token });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async googleLogin(req, res, next) {
+    try {
+      const { googleToken } = req.body;
+      const ticket = await client.verifyIdToken({
+        idToken: googleToken,
+        audience:
+          '1044543553547-3h6opkof2adsl9nd2hgqolk08lgr34qq.apps.googleusercontent.com',
+      });
+      const password = Math.random().toString();
+      const { email, name } = ticket.getPayload();
+      const [user, created] = await User.findOrCreate({
+        where: { email: email },
+        defaults: {
+          userName: name,
+          email,
+          password,
+        },
+      });
+      const access_token = signToken({ id: user.id });
+      res.status(200).json({ access_token });
     } catch (error) {
       next(error);
     }

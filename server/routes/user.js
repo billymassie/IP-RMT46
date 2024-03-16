@@ -5,6 +5,7 @@ const { authentication } = require('../middlewares/auth');
 
 router.post('/register', Controller.register);
 router.post('/login', Controller.login);
+router.post('/google-login', Controller.googleLogin);
 router.use(authentication);
 router.get('/my-movies', Controller.userMovie);
 router.put('/my-movies/:id', Controller.updateMovie);
