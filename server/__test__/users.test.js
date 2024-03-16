@@ -59,7 +59,7 @@ describe('POST /users/login', () => {
       expect(res.status).toBe(400);
       expect(res.body).toHaveProperty('message', 'Invalid email or password');
     });
-    test.only('should return 400', async () => {
+    test('should return 400', async () => {
       let res = await req(app)
         .post('/users/login')
         .send({ email: '', password: 'admin' });
@@ -68,7 +68,6 @@ describe('POST /users/login', () => {
     });
   });
 });
-
 beforeAll(async () => {
   await queryInterface.bulkDelete('Users', null, {
     truncate: true,
