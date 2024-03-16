@@ -5,7 +5,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, Divider } from '@mui/material';
 
-export default function MovieCard({ title, posterUrl, overview }) {
+export default function MovieCard({
+  title,
+  posterUrl,
+  overview,
+  handleClick,
+  btnCaption,
+}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -40,8 +46,9 @@ export default function MovieCard({ title, posterUrl, overview }) {
         <Button
           size='small'
           color='primary'
+          onClick={handleClick}
         >
-          Add to favorite
+          {btnCaption}
         </Button>
       </CardActions>
     </Card>

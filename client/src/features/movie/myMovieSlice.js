@@ -5,8 +5,8 @@ const initialState = {
   list: [],
 };
 
-export const movieSlice = createSlice({
-  name: 'movies',
+export const myMovieSlice = createSlice({
+  name: 'myMovies',
   initialState,
   reducers: {
     setMovies: (state, actions) => {
@@ -15,12 +15,12 @@ export const movieSlice = createSlice({
   },
 });
 // Action creators are generated for each case reducer function
-export const { setMovies } = movieSlice.actions;
+export const { setMovies } = myMovieSlice.actions;
 export const fetchMovies = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: 'http://localhost:3000/movies',
+        url: 'http://localhost:3000/users/my-movies',
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -32,22 +32,5 @@ export const fetchMovies = () => {
     }
   };
 };
-export const addMovie = (movieData, navigate) => {
-  return async () => {
-    try {
-      await axios({
-        url: 'http://localhost:3000/movies',
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        data: movieData,
-      });
-      navigate('/my-movies');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
 
-export default movieSlice.reducer;
+export default myMovieSlice.reducer;
