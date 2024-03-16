@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { Container } from '@mui/material';
+import axios from 'axios';
 
 export default function Login() {
   const handleSubmit = (event) => {
@@ -16,13 +17,19 @@ export default function Login() {
       password: data.get('password'),
     });
   };
+  const handleCredentialResponse = async ({ credential }) => {
+    const { data } = await axios({
+      url: 'http://localhost:3000/users/google-login',
+      method: 'POST',
+      data: { googleToken: credential },
+    });
+    localStorage.setItem('token', data.access_token);
+  };
   useEffect(() => {
-    function handleCredentialResponse(response) {
-      console.log('Encoded JWT ID token: ' + response.credential);
-    }
     window.onload = function () {
       google.accounts.id.initialize({
-        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        client_id:
+          '1044543553547-3h6opkof2adsl9nd2hgqolk08lgr34qq.apps.googleusercontent.com',
         callback: handleCredentialResponse,
       });
       google.accounts.id.renderButton(
@@ -39,6 +46,7 @@ export default function Login() {
         xs={12}
         sm={8}
         md={5}
+        item
         component={Paper}
         elevation={6}
         sx={{
