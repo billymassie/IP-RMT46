@@ -8,6 +8,10 @@ import { NavLink, redirect, useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -44,7 +48,7 @@ export default function NavBar() {
           </Stack>
           <Button
             color='inherit'
-            onClick={() => navigate('/login')}
+            onClick={() => handleLogout()}
           >
             Logout
           </Button>

@@ -7,15 +7,29 @@ import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { Container } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 export default function Login() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = new FormData(event.currentTarget);
+    try {
+      const { data } = await axios({
+        url: 'http://localhost:3000/users/login',
+        method: 'POST',
+        data: {
+          email: formData.get('email'),
+          password: formData.get('password'),
+        },
+      });
+      localStorage.setItem('token', data.access_token);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleCredentialResponse = async ({ credential }) => {
     const { data } = await axios({
@@ -24,6 +38,7 @@ export default function Login() {
       data: { googleToken: credential },
     });
     localStorage.setItem('token', data.access_token);
+    navigate('/');
   };
   useEffect(() => {
     window.onload = function () {
