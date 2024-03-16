@@ -46,7 +46,7 @@ export default function NavBar() {
             color='inherit'
             onClick={() => navigate('/login')}
           >
-            Login
+            Logout
           </Button>
         </Toolbar>
       </AppBar>
