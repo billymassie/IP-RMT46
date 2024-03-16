@@ -32,5 +32,21 @@ export const fetchMovies = () => {
     }
   };
 };
+export const removeMovie = (movieId) => {
+  return async (dispatch) => {
+    try {
+      const data = await axios({
+        url: `http://localhost:3000/users/my-movies/${movieId}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      dispatch(fetchMovies());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
 export default myMovieSlice.reducer;

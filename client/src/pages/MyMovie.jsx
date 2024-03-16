@@ -3,9 +3,10 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovies } from '../features/movie/myMovieSlice';
+import { fetchMovies, removeMovie } from '../features/movie/myMovieSlice';
 import BasicModal from '../components/Modal';
 import axios from 'axios';
+import { Button } from '@mui/material';
 
 export default function MyMovie() {
   const [userId, setUserId] = useState(0);
@@ -58,6 +59,9 @@ export default function MyMovie() {
       console.log(error);
     }
   };
+  const handleRemove = async (movieId) => {
+    dispatch(removeMovie(movieId));
+  };
   return (
     <>
       <Box sx={{ marginTop: '20px' }}>
@@ -82,7 +86,15 @@ export default function MyMovie() {
                     overview={data.overview}
                     btnCaption={'Gift'}
                     handleClick={() => handleOpenModal(data.id)}
-                  />
+                  >
+                    <Button
+                      size='small'
+                      color='primary'
+                      onClick={() => handleRemove(data.id)}
+                    >
+                      Remove
+                    </Button>
+                  </MovieCard>
                 </Grid>
               );
             })}
