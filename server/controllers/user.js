@@ -110,6 +110,20 @@ class Controller {
       next(error);
     }
   }
+  static async userList(req, res, next) {
+    try {
+      const data = await User.findAll();
+      const result = data.map((e) => {
+        return {
+          id: e.id,
+          email: e.email,
+        };
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = Controller;

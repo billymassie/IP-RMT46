@@ -7,6 +7,7 @@ router.post('/register', Controller.register);
 router.post('/login', Controller.login);
 router.post('/google-login', Controller.googleLogin);
 router.use(authentication);
+router.get('/list', Controller.userList);
 router.get('/my-movies', Controller.userMovie);
 router.put('/my-movies/:id', Controller.updateMovie);
 router.delete('/my-movies/:id', Controller.deleteMovie);
