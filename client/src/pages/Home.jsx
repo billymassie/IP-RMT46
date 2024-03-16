@@ -1,28 +1,16 @@
 import MovieCard from '../components/MovieCard';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import axios from 'axios';
 import { useEffect } from 'react';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMovies } from '../features/movie/movieSlice';
 
 export default function Home() {
-  const [movies, setMovies] = useState();
-  const fetchMovies = async () => {
-    try {
-      const { data } = await axios({
-        url: 'http://localhost:3000/movies',
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      setMovies(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch = useDispatch();
+  const movies = useSelector((state) => state.movies.list);
+
   useEffect(() => {
-    fetchMovies();
+    dispatch(fetchMovies());
   }, []);
   return (
     <Box sx={{ marginTop: '20px' }}>
